@@ -19,16 +19,13 @@
       {      "name": "Pål Raymond Johansen",
                  "email": "prj_84@hotmail.com"
            },
-			{      "name": "Martin Brasse",
-			       "email": "kasteleman@gmail.com"
-           },
       {      "name": "Nils-Martn Skaanes",
              "email": "nilskaa@gmail.com"
            },
-      {      "name": "Ted Tolboom",
-                  "email": "dtnl.homey@gmail.com"
-           },
       {      "name": "Espen Herseth Halvorsen",
+                  "email": ""
+           },
+      {      "name": "Espen Aa Ljosland",
                   "email": ""
            }
     ]
