@@ -1,61 +1,75 @@
-"use strict";
+'use strict';
 
 const Homey = require('homey');
-
 const ZigBeeDevice = require('homey-meshdriver').ZigBeeDevice;
 
 const maxBrightness = 255;
 
-class ESH316GLED  extends ZigBeeDevice {
-
-	onMeshInit() {
-		this.enableDebug();
-		//this.printNode();
+class ESH316GLED extends ZigBeeDevice {
 
 
-		//register onoff capability
-		if (this.hasCapability('onoff')) this.registerCapability('onoff', 'genOnOff');
-		//register att reportlisteners for onoff
-		this.registerAttrReportListener('genOnOff', 'onOff', 10, 3600, 1, value => {
-			this.log('onoff', value);
-			this.setCapabilityValue('onoff', value === 1);
-		}, 0);
+  	// this method is called when the Device is inited
+  	onMeshInit() {
+      this.enableDebug();
 
-		//register dim capability
-		if (this.hasCapability('dim')) this.registerCapability('dim', 'genLevelCtrl');
-		//register att reportlisteners for dim
-		this.registerAttrReportListener('genLevelCtrl', 'currentLevel', 10, 3600, 10, value => {
-			this.log('dim report', value);
-			this.setCapabilityValue('dim', value / maxBrightness);
-		}, 0);
 
-		}
+        		// register a capability listener
+        		this.registerCapabilityListener('onoff', this.onCapabilityOnoff.bind(this));
+            this.registerCapabilityListener('dim', this.onCapabilitydim.bind(this))
 
-    async _registerCapabilityListenerHandler(capabilitySetObj, capabilityId, value, opts) {
-        this.log(`set ${capabilityId} -> ${value}`);
-        if (typeof capabilitySetObj.parser !== 'function') return Promise.reject(new Error('parser_is_not_a_function'));
 
-        let commandId = capabilitySetObj.commandId;
-        if (typeof capabilitySetObj.commandId === 'function') commandId = capabilitySetObj.commandId(value, opts);
-        const parsedPayload = await capabilitySetObj.parser.call(this, value, opts);
-        if (parsedPayload instanceof Error) return Promise.reject(parsedPayload);
-        if (parsedPayload === null) return Promise.resolve();
+        		//register att reportlisteners for onoff
+        		this.registerAttrReportListener('genOnOff', 'onOff', 2, 300, 1, value => {
+        			this.log('onoff', value);
+        			this.setCapabilityValue('onoff', value === 1);
+        		}, 0);
 
-        try {
-            const cluster = capabilitySetObj.node.endpoints[capabilitySetObj.endpoint].clusters[capabilitySetObj.clusterId];
-            return Homey.app.queuedCall(() =>
-                cluster.do(commandId, parsedPayload)
-                    .catch(err => {
-                        this.error(`Error: could not perform ${commandId} on ${capabilitySetObj.clusterId}`, err);
-                    })
-            );
-        } catch (err) {
-            return Promise.reject(err);
+
+        		//register att reportlisteners for dim
+        		this.registerAttrReportListener('genLevelCtrl', 'currentLevel', 2, 300, 1, value => {
+        			this.log('dim report', value);
+        			this.setCapabilityValue('dim', value / maxBrightness);
+        		}, 0);
+
+
+        	}
+
+        	// this method is called when the Device has requested a state change (turned on or off)
+    async onCapabilityOnoff( value, opts, callback ) {
+
+        		// return promise, ignore
+        	try {
+            await this.node.endpoints[0].clusters['genOnOff'].do(value ? "on" : "off", {value}).catch(err => null);
+            console.log('onoff command sent');
+        	} catch(e) {
+            console.log('caught error', e);
+          }
+
+          // return resolved promise
+          return Promise.resolve ( );
         }
-    }
-}
 
-module.exports = ESH316GLED;
+
+          // this method is called when the Device has requested a state change (dim)
+
+        // this method is called when the Device has requested a state change (turned on or off)
+    async onCapabilitydim( value, opts, callback ) {
+
+          // return promise, ignore
+          try {
+            await this.node.endpoints[0].clusters['genLevelCtrl'].do("moveToLevelWithOnOff", {level: (value * maxBrightness), transtime: 10}).catch(err => null);
+            console.log('dim command sent');
+          } catch(e) {
+            console.log('caught error', e);
+          }
+
+          // return resolved promise
+          return Promise.resolve( );
+        }
+
+}
+ module.exports = ESH316GLED;
+
 
 //─────────────── Logging stdout & stderr ───────────────
 //2018-08-11 06:58:25 [log] [ElkoApp] Elko App is running!
@@ -89,4 +103,5 @@ module.exports = ESH316GLED;
 //2018-08-11 06:58:26 [log] [ManagerDrivers] [ESH316GLED] [0] ---- sid : attrs
 //2018-08-11 06:58:26 [log] [ManagerDrivers] [ESH316GLED] [0] ---- currentLevel : 254
 //2018-08-11 06:58:26 [log] [ManagerDrivers] [ESH316GLED] [0] ------------------------------------------
-//Jon - 40764118 - jon.berntsen@elko.no
+//2018-08-11 06:58:26 [log] [ManagerDrivers] [ESH316GLED] [0] registerAttrReportListener() -> already configured attr reporting attrReport_0_genOnOff_onOff
+//2018-08-11 06:58:26 [log] [ManagerDrivers] [ESH316GLED] [0] registerAttrReportListener() -> already configured attr reporting attrReport_0_genLevelCtrl_currentLevel
