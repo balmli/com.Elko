@@ -21,8 +21,6 @@ class ESH316GLED  extends ZigBeeDevice {
 			this.setCapabilityValue('onoff', value === 1);
 		}, 0);
 
-/*{return Promise.reject( new Error('Switching the device failed!') );}*/
-
 		//register dim capability
 		if (this.hasCapability('dim')) this.registerCapability('dim', 'genLevelCtrl');
 		//register att reportlisteners for dim
@@ -32,6 +30,29 @@ class ESH316GLED  extends ZigBeeDevice {
 		}, 0);
 
 		}
+
+    async _registerCapabilityListenerHandler(capabilitySetObj, capabilityId, value, opts) {
+        this.log(`set ${capabilityId} -> ${value}`);
+        if (typeof capabilitySetObj.parser !== 'function') return Promise.reject(new Error('parser_is_not_a_function'));
+
+        let commandId = capabilitySetObj.commandId;
+        if (typeof capabilitySetObj.commandId === 'function') commandId = capabilitySetObj.commandId(value, opts);
+        const parsedPayload = await capabilitySetObj.parser.call(this, value, opts);
+        if (parsedPayload instanceof Error) return Promise.reject(parsedPayload);
+        if (parsedPayload === null) return Promise.resolve();
+
+        try {
+            const cluster = capabilitySetObj.node.endpoints[capabilitySetObj.endpoint].clusters[capabilitySetObj.clusterId];
+            return Homey.app.queuedCall(() =>
+                cluster.do(commandId, parsedPayload)
+                    .catch(err => {
+                        this.error(`Error: could not perform ${commandId} on ${capabilitySetObj.clusterId}`, err);
+                    })
+            );
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
 }
 
 module.exports = ESH316GLED;
