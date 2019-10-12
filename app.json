@@ -93,12 +93,14 @@
       "class": "thermostat",
       "capabilities": [
         "target_temperature",
+        "measure_temperature",
         "measure_temperature.air",
         "measure_temperature.floor",
         "measure_power",
         "meter_power",
         "onoff.childlock",
-        "onoff.heat"
+        "onoff.heat",
+        "temp_mode"
       ],
       "capabilitiesOptions": {
         "target_temperature": {
@@ -208,6 +210,16 @@
       },
       "getable": true,
       "setable": false
+    },
+    "temp_mode": {
+      "type": "number",
+      "title": {
+        "en": "Temperature mode"
+      },
+      "getable": true,
+      "setable": false,
+      "insights": false,
+      "uiComponent": null
     }
   }
 }

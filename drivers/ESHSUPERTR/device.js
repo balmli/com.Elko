@@ -81,9 +81,7 @@ class ESHSUPERTR extends ZigBeeDevice {
 		// Register capability
 		this.registerCapability('measure_temperature.air', 'hvacThermostat', {
 			get: 'localTemp',
-			reportParser(value) {
-				return Math.round((value / 100) * 10) / 10;
-			},
+			reportParser: value => this.updateTemperature(value, 0),
 			report: 'localTemp',
 			getOpts: {
 				getOnLine: true,
@@ -104,10 +102,20 @@ class ESHSUPERTR extends ZigBeeDevice {
 		//Register capability
 		this.registerCapability('measure_temperature.floor', 'hvacThermostat', {
 			get: '1033',
-			reportParser(value) {
-				return Math.round((value / 100) * 10) / 10;
-			},
+			reportParser: value => this.updateTemperature(value, 1),
 			report: '1033',
+			getOpts: {
+				getOnLine: true,
+				getOnStart: true,
+				pollInterval: 600000,
+			},
+		});
+
+		// Temperature mode
+		this.registerCapability("temp_mode", "hvacThermostat", {
+			get: "1027",
+			reportParser: value => value,
+			report: "1027",
 			getOpts: {
 				getOnLine: true,
 				getOnStart: true,
@@ -124,7 +132,17 @@ class ESHSUPERTR extends ZigBeeDevice {
 */
 
 	}
+
+	async updateTemperature(value, temp_mode) {
+		const temperature = Math.round((value / 100) * 10) / 10;
+		if (this.hasCapability("temp_mode") && this.getCapabilityValue("temp_mode") === temp_mode) {
+			await this.setCapabilityValue('measure_temperature', temperature).catch(console.error);
+		}
+		return temperature;
+	}
+
 }
+
 module.exports = ESHSUPERTR;
 
 //2018-08-13 20:00:46 [log] [ManagerDrivers] [ESHSUPERTR] [0] ZigBeeDevice has been inited
