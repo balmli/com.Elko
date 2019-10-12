@@ -115,20 +115,6 @@
           "title": {
             "en": "Floor"
           }
-        },
-        "onoff.childlock": {
-          "title": {
-            "en": "Child Lock"
-          },
-          "getable": true,
-          "setable": true
-        },
-        "onoff.heat": {
-          "title": {
-            "en": "Heating"
-          },
-          "getable": true,
-          "setable": false
         }
       },
       "mobile": {
@@ -181,5 +167,47 @@
         "small": "/drivers/ESHSUPERTR/assets/images/Small.jpg"
       }
     }
-  ]
+  ],
+  "capabilities": {
+    "onoff.childlock": {
+      "type": "boolean",
+      "icon": "/drivers/ESHSUPERTR/assets/child.svg",
+      "label": {
+        "true": {
+          "en": "Yes"
+        },
+        "false": {
+          "en": "No"
+        }
+      },
+      "title": {
+        "en": "Child Lock"
+      },
+      "desc": {
+        "en": "Child Lock"
+      },
+      "getable": true,
+      "setable": false
+    },
+    "onoff.heat": {
+      "type": "boolean",
+      "icon": "/drivers/ESHSUPERTR/assets/heating.svg",
+      "label": {
+        "true": {
+          "en": "Heating"
+        },
+        "false": {
+          "en": "Idle"
+        }
+      },
+      "title": {
+        "en": "Heating"
+      },
+      "desc": {
+        "en": "Heating"
+      },
+      "getable": true,
+      "setable": false
+    }
+  }
 }
