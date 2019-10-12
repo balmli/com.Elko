@@ -1,170 +1,185 @@
 {
-    "id": "com.elko",
-    "name": {
-        "en": "ELKO"
-    },
-    "description": {
-        "en": "This app adds support for your ELKO Smart Home devices"
-    },
-    "category": [ "lights", "climate" ],
-    "version": "0.0.5",
-    "compatibility": ">=1.5.3",
-    "sdk": 2,
-    "author": {
+  "id": "com.elko",
+  "name": {
+    "en": "ELKO"
+  },
+  "description": {
+    "en": "This app adds support for your ELKO Smart Home devices"
+  },
+  "category": [
+    "lights",
+    "climate"
+  ],
+  "version": "0.1.0",
+  "compatibility": ">=1.5.3",
+  "sdk": 2,
+  "author": {
+    "name": "Pål Raymond Johansen",
+    "email": "prj_84@hotmail.com"
+  },
+  "contributors": {
+    "developers": [
+      {
         "name": "Pål Raymond Johansen",
         "email": "prj_84@hotmail.com"
-    },
-	  "contributors": {
-		    "developers": [
-      {      "name": "Pål Raymond Johansen",
-                 "email": "prj_84@hotmail.com"
-           },
-      {      "name": "Nils-Martn Skaanes",
-             "email": "nilskaa@gmail.com"
-           },
-      {      "name": "Espen Herseth Halvorsen",
-                  "email": ""
-           },
-      {      "name": "Espen Aa Ljosland",
-                  "email": ""
-           }
+      },
+      {
+        "name": "Nils-Martn Skaanes",
+        "email": "nilskaa@gmail.com"
+      },
+      {
+        "name": "Espen Herseth Halvorsen",
+        "email": ""
+      },
+      {
+        "name": "Espen Ljosland",
+        "email": "espen@ljosland.com"
+      },
+      {
+        "name": "Bjørnar Almli",
+        "email": "bjornar.almli@gmail.com"
+      }
     ]
-	},
-
-	  "contributing": {
+  },
+  "contributing": {
     "donate": {
       "paypal": {
         "username": "prj84"
       }
     }
   },
-
-    "images": {
-        "large": "/assets/images/Large.jpg",
-        "small": "/assets/images/small.jpg"
+  "images": {
+    "large": "/assets/images/Large.jpg",
+    "small": "/assets/images/small.jpg"
+  },
+  "drivers": [
+    {
+      "id": "ESH316GLED",
+      "name": {
+        "en": "ESH 316GLED Dimmer RF PF"
+      },
+      "class": "light",
+      "capabilities": [
+        "onoff",
+        "dim"
+      ],
+      "capabilitiesOptions": {
+        "dim": {
+          "setOnDim": "false"
+        }
+      },
+      "zigbee": {
+        "manufacturerName": "ELKO",
+        "productId": "ElkoDimmerZHA",
+        "deviceId": 257,
+        "profileId": 260,
+        "learnmode": {
+          "image": "/drivers/ESH316GLED/assets/include.svg",
+          "instruction": {
+            "en": "Click on and hold dimmer wheel 1. and pushbutton 2. Until green LED 3. flashes. Wait for Homey to list device"
+          }
+        }
+      },
+      "images": {
+        "large": "/drivers/ESH316GLED/assets/images/Large.jpg",
+        "small": "/drivers/ESH316GLED/assets/images/Small.jpg"
+      }
     },
-
-
-    "drivers": [
-	{
-                "id": "ESH316GLED",
-                "name": {
-                    "en": "ESH 316GLED Dimmer RF PF"
-                },
-                "class": "light",
-                "capabilities": [ "onoff", "dim" ],
-                "capabilitiesOptions": {
-                    "dim": {
-                        "setOnDim": "false"
-                              }
-                            },
-                "zigbee": {
-                    "manufacturerName": "ELKO",
-                    "productId": "ElkoDimmerZHA",
-                    "deviceId": 257,
-                    "profileId": 260,
-				    "learnmode": {
-                        "image": "/drivers/ESH316GLED/assets/include.svg",
-                        "instruction": {
-                            "en": "Click on and hold dimmer wheel 1. and pushbutton 2. Until green LED 3. flashes. Wait for Homey to list device"
-                        }
-                    }
-                },
-                "images": {
-                    "large": "/drivers/ESH316GLED/assets/images/Large.jpg",
-                    "small": "/drivers/ESH316GLED/assets/images/Small.jpg"
-                }
-	},
-		{
-                "id": "ESHSUPERTR",
-                "name": {
-                    "en": "ESH SUPER TR Thermostat RF"
-                },
-                "class": "thermostat",
-                "capabilities": [ "target_temperature",
-                  "measure_temperature.air",
-                  "measure_temperature.floor",
-                  "measure_power",
-                  "meter_power",
-                  "onoff.childlock",
-                  "onoff.heat" ],
-                "capabilitiesOptions": {
-                    "target_temperature": {
-                        "min": 5,
-                        "max": 50,
-                        "step": 0.5
-                              },
-			               "measure_temperature.air": {
-          		           "title": {
-             		            "en": "Air"
-          		                  }
-			                           },
-			               "measure_temperature.floor": {
-                          "title":{
-			                         "en": "Floor"
-			                          }
-			                           },
-			               "onoff.childlock":{
-			                    "title": {
-			                         "en":"Child Lock"
-                             },
-                             "getable": true,
-                             "setable": true
-                              },
-                      "onoff.heat":{
-                           "title": {
-                                "en":"Heating"
-                              },
-                              "getable": true,
-                              "setable": false
-                             }
+    {
+      "id": "ESHSUPERTR",
+      "name": {
+        "en": "ESH SUPER TR Thermostat RF"
+      },
+      "class": "thermostat",
+      "capabilities": [
+        "target_temperature",
+        "measure_temperature.air",
+        "measure_temperature.floor",
+        "measure_power",
+        "meter_power",
+        "onoff.childlock",
+        "onoff.heat"
+      ],
+      "capabilitiesOptions": {
+        "target_temperature": {
+          "min": 5,
+          "max": 50,
+          "step": 0.5
         },
-
+        "measure_temperature.air": {
+          "title": {
+            "en": "Air"
+          }
+        },
+        "measure_temperature.floor": {
+          "title": {
+            "en": "Floor"
+          }
+        },
+        "onoff.childlock": {
+          "title": {
+            "en": "Child Lock"
+          },
+          "getable": true,
+          "setable": true
+        },
+        "onoff.heat": {
+          "title": {
+            "en": "Heating"
+          },
+          "getable": true,
+          "setable": false
+        }
+      },
       "mobile": {
-                "components": [
-                  {
-                    "id": "icon",
-                    "capabilities": [
-                    ]
-                  },
-                  {
-                    "id": "sensor",
-                    "capabilities": [ "onoff.heat",
-                      "measure_temperature.air",
-                      "measure_temperature.floor",
-                      "onoff.childlock"
-                    ],
-                    "options": {
-                        "icons":{
-                          "onoff.heat": "/drivers/ESHSUPERTR/assets/heating.svg",
-                          "onoff.childlock": "/drivers/ESHSUPERTR/assets/child.svg"
-                        },
-                        "showTitle": true
-                    }
-                  },
-                  {
-                    "id": "thermostat",
-                    "capabilities": [ "target_temperature" ]
-                  }
-                ]
+        "components": [
+          {
+            "id": "icon",
+            "capabilities": [
+            ]
+          },
+          {
+            "id": "sensor",
+            "capabilities": [
+              "onoff.heat",
+              "measure_temperature.air",
+              "measure_temperature.floor",
+              "onoff.childlock"
+            ],
+            "options": {
+              "icons": {
+                "onoff.heat": "/drivers/ESHSUPERTR/assets/heating.svg",
+                "onoff.childlock": "/drivers/ESHSUPERTR/assets/child.svg"
               },
-
-		"zigbee": {
-                    "manufacturerName": "ELKO",
-                    "productId": ["Super TR"],
-                    "deviceId": 769,
-                    "profileId": 260,
-				                "learnmode": {
-                          "image": "/drivers/ESHSUPERTR/assets/include.svg",
-                          "instruction": {
-                              "en": "Click on and hold arrow up and M Button (1) until joining/pairing is displayed. Wait for Homey to list device"
-                        }
-                    }
-                },
-                    "images": {
-                      "large": "/drivers/ESHSUPERTR/assets/images/Large.jpg",
-                      "small": "/drivers/ESHSUPERTR/assets/images/Small.jpg"
-                }
-	}
-	]
+              "showTitle": true
+            }
+          },
+          {
+            "id": "thermostat",
+            "capabilities": [
+              "target_temperature"
+            ]
+          }
+        ]
+      },
+      "zigbee": {
+        "manufacturerName": "ELKO",
+        "productId": [
+          "Super TR"
+        ],
+        "deviceId": 769,
+        "profileId": 260,
+        "learnmode": {
+          "image": "/drivers/ESHSUPERTR/assets/include.svg",
+          "instruction": {
+            "en": "Click on and hold arrow up and M Button (1) until joining/pairing is displayed. Wait for Homey to list device"
+          }
+        }
+      },
+      "images": {
+        "large": "/drivers/ESHSUPERTR/assets/images/Large.jpg",
+        "small": "/drivers/ESHSUPERTR/assets/images/Small.jpg"
+      }
+    }
+  ]
 }
